@@ -7,6 +7,7 @@ The board is updated in real time for all connected users, and its state is alwa
 
 ## Changes of this fork
 - **Display a background image to draw on**
+- Node in Docker Container not running as root
 - English only
 - Different Startpage
 - Some smaller changes
