@@ -9,7 +9,7 @@ The board is updated in real time for all connected users, and its state is alwa
 - **Display a background image to draw on**
 - Node in Docker container not running as root
 - English only
-- Different startpage showing last visted boards
+- Different startpage showing last visited boards
 - Some smaller changes
 
 ## Why
