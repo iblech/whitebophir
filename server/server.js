@@ -36,7 +36,7 @@ var TRANSLATIONS = JSON.parse(fs.readFileSync(path.join(__dirname, "translations
 app.listen(PORT);
 log("server started", { port: PORT });
 
-var CSP = "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:";
+var CSP = "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws: wss:; script-src 'self' 'nonce-sadshrng9ehvnuboarfz8bisds'";
 
 var fileserver = new nodestatic.Server(WEBROOT, {
 	"headers": {
@@ -96,7 +96,8 @@ function handleRequest(request, response) {
 		// "boards" refers to the root directory
 		if (parts.length === 1 && parsedUrl.query.board) {
 			// '/boards?board=...' This allows html forms to point to boards
-			var headers = { Location: 'boards/' + encodeURIComponent(parsedUrl.query.board) };
+			var image =  Object.keys(parsedUrl.query).indexOf( "image" ) !== -1 ? '#' + parsedUrl.query.image : '';
+			var headers = { Location: 'boards/' + encodeURIComponent(parsedUrl.query.board) + image };
 			response.writeHead(301, headers);
 			response.end();
 		} else if (parts.length === 2 && request.url.indexOf('.') === -1) {
@@ -135,7 +136,7 @@ function handleRequest(request, response) {
 				"Content-Type": "application/json",
 				"Content-Disposition": 'attachment; filename="' + boardName + '.wbo"'
 			};
-		if (parts[2]) {
+		if (parts.length > 2 && !isNaN( Date.parse( parts[2] ) ) ) {
 			history_file += '.' + parts[2] + '.bak';
 		}
 		log("Downloading " + history_file);

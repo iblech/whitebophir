@@ -17,3 +17,5 @@ npm-debug.log
 
 # Openode
 .openode
+
+.DS_Store

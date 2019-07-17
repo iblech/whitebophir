@@ -3,23 +3,16 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>{{board}} | WBO | {{translate translations 'Collaborative whiteboard'}}</title>
+	<title>WBO | Collaborative whiteboard</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" type="text/css" href="board.css" />
 	<script src="/socket.io/socket.io.js"></script>
-	<meta name="description"
-		content="{{translate translations 'A free and opensource online collaborative drawing tool. Sketch new ideas together on WBO !'}}'" />
-	<meta name="keywords"
-		content="{{translate translations 'Collaborative whiteboard'}},online,draw,paint,shared,realtime,wbo,whitebophir" />
-	<link rel="apple-touch-icon" href="/favicon.svg">
+	<meta name="description" content="A opensource online collaborative drawing tool. Sketch new ideas together on WBO!" />
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
 	<meta property="og:title" content="{{board}} board on WBO" />
 	<meta property="og:url" content="{{baseUrl}}/boards/{{boardUriComponent}}" />
 	<meta property="og:image" content="{{baseUrl}}/preview/{{boardUriComponent}}" />
-	<link rel="canonical" href="{{baseUrl}}/boards/{{boardUriComponent}}?lang={{language}}" />
-	{{#languages}}
-	<link rel="alternate" hreflang="{{.}}" href="{{../baseUrl}}/boards/{{../boardUriComponent}}?lang={{.}}" />
-	{{/languages}}
+	<link rel="canonical" href="{{baseUrl}}/boards/{{boardUriComponent}}?lang=en" />
 </head>
 
 <body>
@@ -30,7 +23,7 @@
 		</svg>
 	</div>
 
-	<div id="loadingMessage">{{translate translations 'Loading'}}</div>
+	<div id="loadingMessage">Loading</div>
 
 	<div id="menu">
 		<div id="menuItems">
@@ -43,7 +36,7 @@
 					<span class="tool-icon">
 						<input type="color" id="chooseColor" value="#1913B0" />
 					</span>
-					<label class="tool-name" for="chooseColor">{{translate translations 'Color'}}</label>
+					<label class="tool-name" for="chooseColor">Color</label>
 				</li>
 				<li class="tool">
 					<span class="tool-icon">
@@ -51,7 +44,7 @@
 							<circle id="sizeIndicator" cx=0 cy=0 r=10 /></svg>
 					</span>
 					<label class="tool-name slider" for="chooseSize">
-						<span>{{translate translations 'Size'}}</span>
+						<span>Size</span>
 						<input type="range" id="chooseSize" value="10" min="1" max="50" step="1" class="rangeChooser" />
 					</label>
 				</li>
@@ -68,17 +61,19 @@
 						</svg>
 					</span>
 					<label class="tool-name slider" for="chooseOpacity">
-						<span>{{translate translations 'Opacity'}}</span>
-						<input type="range" id="chooseOpacity" value="1" min="0.2" max="1" step="0.1"
-							class="rangeChooser" />
+						<span>Opacity</span>
+						<input type="range" id="chooseOpacity" value="1" min="0.2" max="1" step="0.1" class="rangeChooser" />
 					</label>
 				</li>
 			</ul>
 		</div>
 	</div>
 
+	<footer>
+		<a href="" target="_blank" id="sharelink" class="smallink">Sharelink</a>
+	</footer>
 
-	<script type="application/json" id="translations">{{{json translations}}}</script>
+	<script type="application/json" id="translations">{}</script>
 	<script src="js/path-data-polyfill.js"></script>
 	<script src="js/minitpl.js"></script>
 	<script src="js/board.js"></script>
@@ -90,6 +85,24 @@
 	<script src="tools/hand/hand.js"></script>
 	<script src="tools/zoom/zoom.js"></script>
 	<script src="/js/canvascolor/canvascolor.min.js"></script>
+
+	<script>
+		var boardname = window.location.pathname.substr(8).replace(/[^a-zA-Z0-9]/,'');
+		if( window.location.hash.substr( 1, 4 ) === "http" ){ // http://localhost:8080/boards/<<name>>#<<image-url>>
+			var url = window.location.hash.substr(1);
+			localStorage.setItem( "bg_" + boardname, url);
+		}
+		if( localStorage.hasOwnProperty( "bg_" + boardname ) ){ // load background image
+			var url = localStorage.getItem( "bg_" + boardname );
+			document.getElementById("board").style.background = "url('"+ url +"') no-repeat";
+			document.getElementById("board").style.backgroundPosition = "100px 100px";
+			document.getElementById("sharelink").href = window.location.origin + "/boards?board=" + encodeURIComponent(boardname) + "&image=" + encodeURIComponent(url);
+		}
+		else{
+			document.getElementById("sharelink").href = window.location.origin + "/boards?board=" + encodeURIComponent(boardname);
+		}
+		localStorage.setItem( "url_" + boardname, document.getElementById("sharelink").href);
+	</script>
 </body>
 
 </html>

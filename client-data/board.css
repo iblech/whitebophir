@@ -177,3 +177,9 @@ input {
 	margin: 0;
 	background: transparent;
 }
+
+footer{
+	position: fixed;
+	bottom: 5px;
+	right: 5px;
+}

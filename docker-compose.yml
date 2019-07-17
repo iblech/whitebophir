@@ -1,17 +1,12 @@
-version: '3'
+version: '2'
 services:
   www:
+    container_name: wbo
     volumes:
-      - /opt/app/server-data:/opt/app/server-data
+      - server-data:/home/node/app/server-data
     ports:
-      - '80:80'
+      - '127.0.0.1:8080:8080' # to use with reverse proxy
+      # - 80:8080 to publish direct
     build:
       context: .
-    restart: on-failure
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 5
-        window: 60s
-
+    restart: always
