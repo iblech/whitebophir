@@ -65,6 +65,17 @@
 						<input type="range" id="chooseOpacity" value="1" min="0.2" max="1" step="0.1" class="rangeChooser" />
 					</label>
 				</li>
+				<li class="tool">
+					<span class="tool-icon" id="toggleBackground">
+						<svg viewBox="-2 -2 104 104">
+							<path d="M0,0 v100 h100 v-100 h-100 h25 v100 h25 v-100 h25 v100 h25 v-25 h-100 v-25 h100 v-25 h-100 v-27" fill="none" stroke="black" stroke-width="4"/>
+						</svg>
+					</span>
+					<label class="tool-name slider" for="backgroundSizeChooser">
+						<span>Background Size</span>
+						<input type="range" id="backgroundSizeChooser" value="250" min="10" max="1000" step="50" class="rangeChooser" />
+					</label>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -94,14 +105,30 @@
 		}
 		if( localStorage.hasOwnProperty( "bg_" + boardname ) ){ // load background image
 			var url = localStorage.getItem( "bg_" + boardname );
-			document.getElementById("board").style.background = "url('"+ url +"') no-repeat";
-			document.getElementById("board").style.backgroundPosition = "100px 100px";
+			document.getElementById("board").style.background = "url('"+ url +"') 100px 100px no-repeat";
 			document.getElementById("sharelink").href = window.location.origin + "/boards?board=" + encodeURIComponent(boardname) + "&image=" + encodeURIComponent(url);
 		}
 		else{
 			document.getElementById("sharelink").href = window.location.origin + "/boards?board=" + encodeURIComponent(boardname);
 		}
 		localStorage.setItem( "url_" + boardname, document.getElementById("sharelink").href);
+		
+		let backgroundSizeCh = (a) => {
+			document.getElementById("board").style.backgroundSize = ( typeof a === "undefined" ) ? "" : a +"px "+ a +"px";
+		}
+		var originalBackground = document.getElementById("board").style.background;
+		document.getElementById("toggleBackground").onclick = () => {
+			if( document.getElementById("board").style.background != originalBackground  ){
+				backgroundSizeCh();
+				document.getElementById("board").style.background = originalBackground;
+			}
+			else{
+				document.getElementById("board").style.background = "url('/boards/background.svg')";
+			}
+		};
+		document.getElementById("backgroundSizeChooser").addEventListener('change', (e) => {
+			backgroundSizeCh(document.getElementById("backgroundSizeChooser").value)
+		});
 	</script>
 </body>
 
